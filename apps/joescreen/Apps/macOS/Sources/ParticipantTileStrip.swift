@@ -101,13 +101,13 @@ private struct ParticipantFaceTile: View {
         if tile.isSelf {
             // Self: mirrored local camera preview when the camera is on, else avatar.
             if let track = model.localCameraTrack {
-                SwiftUIVideoView(track, layoutMode: .fill, mirrorMode: .mirror)
+                VideoSurface(track: track, mirrorMode: .mirror)
             } else {
                 AvatarView(name: name, color: color)
             }
         } else if tile.decoded, media?.cameraOn == true, let track = model.cameraTrack(for: tile.participant) {
             // Remote: live camera only when decodable (budget) AND camera-on (not a muted frozen frame).
-            SwiftUIVideoView(track, layoutMode: .fill)
+            VideoSurface(track: track)
         } else {
             AvatarView(name: name, color: color)
         }
@@ -197,11 +197,11 @@ private struct ActiveSpeakerPictureInPictureView: View {
     @ViewBuilder
     private func speakerContent(_ participantID: ParticipantID) -> some View {
         if participantID == model.localParticipantID, let track = model.localCameraTrack {
-            SwiftUIVideoView(track, layoutMode: .fill, mirrorMode: .mirror)
+            VideoSurface(track: track, mirrorMode: .mirror)
                 .ignoresSafeArea()
         } else if model.mediaState(for: participantID)?.cameraOn == true,
                   let track = model.cameraTrack(for: participantID) {
-            SwiftUIVideoView(track, layoutMode: .fill)
+            VideoSurface(track: track)
                 .ignoresSafeArea()
         } else {
             ZStack {

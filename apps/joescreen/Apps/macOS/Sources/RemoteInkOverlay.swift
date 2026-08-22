@@ -49,12 +49,18 @@ final class RemoteInkOverlayManager {
             }
             let overlay = overlays[id] ?? Self.makeOverlay()
             overlays[id] = overlay
-            if overlay.frame != frame { overlay.setFrame(frame, display: false) }
+            let frameChanged = overlay.frame != frame
+            if frameChanged { overlay.setFrame(frame, display: false) }
+            // The 4 Hz poll mostly finds nothing changed — repaint only on a real frame move or
+            // stroke set change, and don't re-front an overlay that is already ordered in.
             if let view = overlay.contentView as? InkOverlayView {
-                view.strokes = ink.strokes(in: id)
-                view.needsDisplay = true
+                let strokes = ink.strokes(in: id)
+                if frameChanged || view.strokes != strokes {
+                    view.strokes = strokes
+                    view.needsDisplay = true
+                }
             }
-            overlay.orderFrontRegardless()
+            if !overlay.isVisible { overlay.orderFrontRegardless() }
         }
 
         overlays.isEmpty ? stopPolling() : startPolling()

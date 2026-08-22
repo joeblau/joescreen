@@ -61,7 +61,7 @@ struct RemoteVideoView: View {
                 // The live remote video, only while rendering is active. Detaching it (soft-hide)
                 // makes adaptive-stream stop the SFU forwarding (R24/R32); a placeholder keeps aspect.
                 if window.isRenderingActive {
-                    SwiftUIVideoView(window.track, layoutMode: .fit)
+                    VideoSurface(track: window.track, layoutMode: .fit)
                         .ignoresSafeArea()
                 }
                 // Annotation ink overlay (F9): every participant's strokes; captures local strokes in

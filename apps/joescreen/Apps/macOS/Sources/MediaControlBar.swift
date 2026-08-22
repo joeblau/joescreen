@@ -163,7 +163,7 @@ struct SelfPreviewTile: View {
                 .fill(.black)
                 .aspectRatio(16.0 / 10.0, contentMode: .fit)
                 .overlay {
-                    SwiftUIVideoView(track, layoutMode: .fit, mirrorMode: .mirror)
+                    VideoSurface(track: track, layoutMode: .fit, mirrorMode: .mirror)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
                 .overlay(

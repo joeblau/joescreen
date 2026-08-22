@@ -307,10 +307,10 @@ struct SharedWindowTile: View {
                     // remote track — render the LOCAL published track instead so the sharer sees a live
                     // self-preview (previously this fell through to the placeholder glyph — the bug).
                     if isLocal, let track = model.localWindowTrack(windowID) {
-                        SwiftUIVideoView(track, layoutMode: .fit)
+                        VideoSurface(track: track, layoutMode: .fit)
                             .clipShape(RoundedRectangle(cornerRadius: 8))
                     } else if !isClosed, isRendering, let track = model.remoteWindowTrack(windowID) {
-                        SwiftUIVideoView(track, layoutMode: .fit)
+                        VideoSurface(track: track, layoutMode: .fit)
                             .clipShape(RoundedRectangle(cornerRadius: 8))
                     } else {
                         Image(systemName: isClosed ? "macwindow.badge.plus" : "macwindow")
