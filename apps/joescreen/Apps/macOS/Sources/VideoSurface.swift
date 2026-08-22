@@ -17,8 +17,21 @@ struct VideoSurface: View {
     var layoutMode: VideoView.LayoutMode = .fill
     var mirrorMode: VideoView.MirrorMode = .auto
 
+    /// macOS 27 enforces that nothing dirties Auto Layout constraints during the window's
+    /// display-cycle flush. The sample-buffer `VideoView` does exactly that while SwiftUI queries
+    /// its layout traits mid-`NSHostingView.layout` (the surface appears with a move transition →
+    /// `AppKitPlatformViewHost.coreLayoutTraits` → `updateConstraintsForSubtreeIfNeeded` →
+    /// NSISEngine change notification → `_postWindowNeedsUpdateConstraints` throws
+    /// NSInternalInconsistencyException), killing the app the moment a call's video tiles appear.
+    /// Until the attach path is safe there, fall back to the SDK-default Metal renderer on 27+ and
+    /// keep the idle-CPU win everywhere the sample-buffer path is known-good.
+    private static let renderMode: VideoView.RenderMode = {
+        if #available(macOS 27, *) { return .auto }
+        return .sampleBuffer
+    }()
+
     var body: some View {
         SwiftUIVideoView(track, layoutMode: layoutMode, mirrorMode: mirrorMode,
-                         renderMode: .sampleBuffer)
+                         renderMode: Self.renderMode)
     }
 }
