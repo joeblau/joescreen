@@ -60,6 +60,9 @@ struct SessionSidebar: View {
             }
         }
         .listStyle(.sidebar)
+        // Same macOS 26 resize-crash guard as SessionDetail: keep this column's reported min/max
+        // size constant through a live-resize constraint pass. Min width matches the column floor.
+        .frame(minWidth: 190, maxWidth: .infinity, minHeight: 160, maxHeight: .infinity)
         .navigationSplitViewColumnWidth(min: 190, ideal: 230, max: 300)
         // Keep the leading navigation item owned by the sidebar column. This lets AppKit animate
         // the sidebar and its toolbar region as one native split-view transaction.
