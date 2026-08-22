@@ -878,8 +878,11 @@ public final class AppModel {
     }
 
     private func updateSecureInputBanner(secureInputActive: Bool) {
-        secureInputBanner = SecureInputBanner.decide(
+        let banner = SecureInputBanner.decide(
             secureInputActive: secureInputActive, someoneIsDriving: activeDriver != nil)
+        // Same-value guard: the R8 poll re-decides every second; only a real transition may touch
+        // the observable (each set invalidates the session detail's safe-area inset).
+        if secureInputBanner != banner { secureInputBanner = banner }
     }
 
     /// The display label for the current driver (for the "X is driving" badge), or nil.
@@ -1113,6 +1116,10 @@ public final class AppModel {
     /// Apply the reactive media-state snapshot from the transport, and fold any display names it
     /// carries into the name cache so `displayLabel` updates live on `didUpdateName` / late-join.
     private func applyParticipantMedia(_ states: [ParticipantID: ParticipantMediaState]) {
+        // LiveKit re-reports the active-speaker set every few hundred ms during speech, mostly
+        // with an unchanged snapshot. Replacing the whole observable dictionary anyway would
+        // re-render every tile/PiP/roster reader on each report — skip the no-ops.
+        guard states != participantMedia else { return }
         participantMedia = states
         for (id, s) in states where s.displayName != nil {
             displayNames[id] = s.displayName
@@ -1464,7 +1471,9 @@ public final class AppModel {
                 AppLog.error("gate mic unmute failed: \(String(describing: error))")
             }
         }
-        gateMuted = gateAppliedMicMute
+        // @Observable notifies on every SET, not on value change — an unconditional write here
+        // re-invalidated every micLive/gateMuted reader (toolbar, tiles) at the 10 Hz pump rate.
+        if gateMuted != gateAppliedMicMute { gateMuted = gateAppliedMicMute }
     }
 
     /// Pick the loudest participant LiveKit currently considers speech. A small level floor catches
@@ -1486,7 +1495,9 @@ public final class AppModel {
             if lhs.level == rhs.level { return lhs.id.uuidString > rhs.id.uuidString }
             return lhs.level < rhs.level
         }) else { return }
-        activeSpeakerParticipantID = loudest.id
+        // Same-value guard: while one person talks, the pump re-picks them 10×/s — writing the
+        // unchanged ID would re-invalidate the PiP panel and its video view every tick.
+        if activeSpeakerParticipantID != loudest.id { activeSpeakerParticipantID = loudest.id }
     }
 
     /// Route the mic to a specific input device (nil = keep current). Persists the selection so the

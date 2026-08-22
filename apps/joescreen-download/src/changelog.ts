@@ -14,6 +14,16 @@ export interface Release {
 // Newest first.
 export const RELEASES: Release[] = [
 	{
+		version: "0.5.0",
+		date: "2026-08-21",
+		tag: "early beta",
+		highlights: [
+			"Voice isolation is on by default and now has an off switch — echo cancellation, noise suppression, and auto gain live in the mic menu, alongside a shortcut to the system Microphone Mode picker",
+			"When someone draws on your shared window, you now see their ink on the real window — and it never gets baked into the video everyone else receives",
+			"Join sheet and roster refinements",
+		],
+	},
+	{
 		version: "0.4.0",
 		date: "2026-08-21",
 		tag: "early beta",

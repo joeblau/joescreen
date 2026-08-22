@@ -189,6 +189,12 @@ private struct SessionDetail: View {
         .safeAreaInset(edge: .top, spacing: 0) {
             RemoteControlBanner()
         }
+        // Constant min/max frame on every split-column root (also sidebar + inspector): on macOS 26
+        // AppKit throws NSInternalInconsistencyException if a column's NSHostingView reports a
+        // CHANGED min/max size during the window's constraint-update pass, which width-dependent
+        // content (wrapping text, adaptive grids) otherwise does on live resize → crash
+        // (SplitViewChildController.hostingView(_:didUpdateMinSize:maxSize:) mid-display-cycle).
+        .frame(minWidth: 360, maxWidth: .infinity, minHeight: 240, maxHeight: .infinity)
         .navigationTitle(model.joinParameters?.room ?? "JoeScreen")
     }
 }
@@ -204,6 +210,10 @@ private struct SessionInspector: View {
             } action: { width in
                 model.recordInspectorWidth(Double(width))
             }
+            // Same macOS 26 resize-crash guard as SessionDetail: the reported min/max size of this
+            // column's hosting view must stay constant through a live-resize constraint pass. Min
+            // width matches the `inspectorColumnWidth` floor at the session root.
+            .frame(minWidth: 220, maxWidth: .infinity, minHeight: 200, maxHeight: .infinity)
     }
 }
 
@@ -307,10 +317,10 @@ struct SharedWindowTile: View {
                     // remote track — render the LOCAL published track instead so the sharer sees a live
                     // self-preview (previously this fell through to the placeholder glyph — the bug).
                     if isLocal, let track = model.localWindowTrack(windowID) {
-                        SwiftUIVideoView(track, layoutMode: .fit)
+                        VideoSurface(track: track, layoutMode: .fit)
                             .clipShape(RoundedRectangle(cornerRadius: 8))
                     } else if !isClosed, isRendering, let track = model.remoteWindowTrack(windowID) {
-                        SwiftUIVideoView(track, layoutMode: .fit)
+                        VideoSurface(track: track, layoutMode: .fit)
                             .clipShape(RoundedRectangle(cornerRadius: 8))
                     } else {
                         Image(systemName: isClosed ? "macwindow.badge.plus" : "macwindow")

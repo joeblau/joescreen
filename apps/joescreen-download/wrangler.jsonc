@@ -15,7 +15,7 @@
 		// Basename of the current dmg object in R2 (also the download filename users get).
 		"DMG_KEY": "JoeScreen.dmg",
 		// Fallback version shown on the page; the source of truth is src/changelog.ts (CURRENT_VERSION).
-		"APP_VERSION": "0.4.0",
+		"APP_VERSION": "0.5.0",
 		// Public TestFlight join link for the iOS beta (empty string hides the button).
 		"TESTFLIGHT_URL": "https://testflight.apple.com/join/C3AdpdZJ"
 	},
@@ -39,7 +39,7 @@
 			"vars": {
 				"ENVIRONMENT": "production",
 				"DMG_KEY": "JoeScreen.dmg",
-				"APP_VERSION": "0.4.0",
+				"APP_VERSION": "0.5.0",
 				"TESTFLIGHT_URL": "https://testflight.apple.com/join/C3AdpdZJ"
 			},
 			"r2_buckets": [

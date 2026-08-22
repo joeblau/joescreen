@@ -7,6 +7,29 @@ The user-facing highlights from each version are also shown in the "What's new" 
 [joescreen.cheffing.dev](https://joescreen.cheffing.dev) — keep that section (in
 `apps/joescreen-download/src/changelog.ts`) in sync with the entries here when you cut a release.
 
+## [0.5.0] — 2026-08-21 · early beta
+
+### New
+- **Voice isolation, on by default with a way to turn it off** — echo cancellation, noise
+  suppression, and automatic gain are now a persisted preference rather than something the app
+  forces on. The mic menu gains a **Voice Isolation** toggle and a **Microphone Mode…** item that
+  opens the system picker (Apple's ML isolation mode can only be chosen by you, never set by an
+  app). The preference is applied after connect and before the first mic enable, so capture starts
+  in the right state.
+- **The sharer now sees remote ink on the real window** — when a peer annotates your shared window,
+  the strokes are painted on borderless click-through overlay windows floating exactly over the
+  window or display you're sharing, using the same geometry viewers see. The overlays are excluded
+  from the capture filter, so ink is never baked into the outgoing video.
+
+### Changed
+- Join-sheet and roster refinements.
+
+### Internal
+- Ultrasonic pairing spike under `Spikes/UltrasonicPairingSpike/`, camera integration test
+  coverage, and `app.sh` dev-loop tweaks.
+
+[0.5.0]: https://joescreen.cheffing.dev
+
 ## [0.4.0] — 2026-08-21 · early beta
 
 ### New
