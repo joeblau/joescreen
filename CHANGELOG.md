@@ -7,6 +7,23 @@ The user-facing highlights from each version are also shown in the "What's new" 
 [joescreen.cheffing.dev](https://joescreen.cheffing.dev) — keep that section (in
 `apps/joescreen-download/src/changelog.ts`) in sync with the entries here when you cut a release.
 
+## [0.5.1] — 2026-08-22 · early beta
+
+### Changed
+- **Much lower in-call CPU.** All macOS video surfaces (remote share windows, grid thumbnails, face
+  tiles, PiP, camera self-preview) moved from the Metal renderer's 60 Hz display-link re-render to
+  sample-buffer rendering (`AVSampleBufferDisplayLayer`), so per-surface cost scales with the
+  track's real frame rate. Observable state writes (audio-gate pump, active-speaker pick,
+  participant-media snapshots, secure-input banner, sharer-ink repaint) now fire only on real
+  transitions instead of at poll rate.
+
+### Fixed
+- Crash when live-resizing the session window on the macOS 26 beta
+  (`NSInternalInconsistencyException` in the split-view constraint pass) — split-column roots now
+  report constant min/max sizes. Thanks @joeblau.
+
+[0.5.1]: https://joescreen.cheffing.dev
+
 ## [0.5.0] — 2026-08-21 · early beta
 
 ### New

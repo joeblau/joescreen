@@ -81,7 +81,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.joescreen.app
         PRODUCT_NAME: JoeScreen
         MARKETING_VERSION: "0.5.1"
-        CURRENT_PROJECT_VERSION: "24"
+        CURRENT_PROJECT_VERSION: "25"
         # App icon from the asset catalog → emits CFBundleIconName (App Store validation requires it).
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         # Entitlements file, overridable by the ship scripts via ${SHIP_MAC_ENTITLEMENTS}. Defaults to
@@ -152,7 +152,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.joescreen.app.ios
         PRODUCT_NAME: JoeScreen
         MARKETING_VERSION: "0.5.1"
-        CURRENT_PROJECT_VERSION: "24"
+        CURRENT_PROJECT_VERSION: "25"
         TARGETED_DEVICE_FAMILY: "1,2"   # iPhone + iPad
         # App icon from the asset catalog → emits CFBundleIconName (App Store validation requires it).
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon

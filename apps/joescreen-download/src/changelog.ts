@@ -14,6 +14,15 @@ export interface Release {
 // Newest first.
 export const RELEASES: Release[] = [
 	{
+		version: "0.5.1",
+		date: "2026-08-22",
+		tag: "early beta",
+		highlights: [
+			"Much lower CPU while in a call — video surfaces now render only when a new frame actually arrives, instead of re-rendering 60 times a second, and the app stopped doing busywork while idle in a call",
+			"Fixed a crash when resizing the session window on the macOS 26 beta",
+		],
+	},
+	{
 		version: "0.5.0",
 		date: "2026-08-21",
 		tag: "early beta",
